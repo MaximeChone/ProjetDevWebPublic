@@ -1,0 +1,36 @@
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS FRIEND;
+DROP TABLE IF EXISTS USER;
+SET FOREIGN_KEY_CHECKS=1;
+CREATE TABLE `user` (
+  `id` int(6) NOT NULL,
+  `mail` varchar(1024) NOT NULL,
+  `password` varchar(1024) NOT NULL,
+  `firstname` varchar(1024) DEFAULT NULL,
+  `lastname` varchar(1024) DEFAULT NULL,
+  `birthdate` date DEFAULT NULL,
+  `role` varchar(1024) NOT NULL DEFAULT 'basic_user'
+);
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `mail` (`mail`);
+ALTER TABLE `user`
+MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+INSERT INTO `user` (`mail`, `password`, `firstname`, `lastname`, `birthdate`, `role`) VALUES
+('test1@test1', '123', 'cc', 'aa', '2020-12-01', 'admin');
+INSERT INTO `user` (`mail`, `password`, `firstname`, `lastname`, `birthdate`) VALUES
+('test2@test2', '123', 'kk', 'ii', '2020-12-01');
+
+CREATE TABLE `friend` (
+  `id_user_1` int(6) NOT NULL,
+  `id_user_2` int(6) NOT NULL,
+  `request_state` varchar(1024) NOT NULL DEFAULT 'pending'
+);
+ALTER TABLE `friend`
+  ADD PRIMARY KEY (`id_user_1`,`id_user_2`),
+  ADD KEY `FK2` (`id_user_2`);
+ALTER TABLE `friend`
+  ADD CONSTRAINT `FK1` FOREIGN KEY (`id_user_1`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK2` FOREIGN KEY (`id_user_2`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+INSERT INTO `friend` (`id_user_1`, `id_user_2`) VALUES
+(1, 2);
